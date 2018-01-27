@@ -806,6 +806,20 @@ class Loader(QMainWindow):
 
     @Slot(str)
     def programDeviceHandler(self, device_path):
+        def load_yaml_file(layout_file):
+            try:
+                with open(layout_file) as file_obj:
+                    try:
+                        return yaml.safe_load(file_obj.read())
+                    except Exception as err:
+                        error_msg_box("Syntax error in yaml file: " + str(err))
+                        self.abort_update(target_device)
+                        return None
+            except Exception as err:
+                error_msg_box("Couldn't read layout file: " + str(err))
+                self.abort_update(target_device)
+                return None
+
         target_device = self.tryOpenDevicePath(device_path)
 
         if target_device == None:
@@ -832,14 +846,9 @@ class Loader(QMainWindow):
             else:
                 pass
 
-            layout_json_obj = None
-            with open(layout_file) as file_obj:
-                try:
-                    layout_json_obj = yaml.safe_load(file_obj.read())
-                except Exception as err:
-                    error_msg_box("Syntax error in yaml file: " + str(err))
-                    self.abort_update(target_device)
-                    return
+            layout_json_obj = load_yaml_file(layout_file)
+            if layout_json_obj == None:
+                return
 
             device_info = protocol.get_device_info(target_device)
             layout_data, settings_data = self.process_layout(layout_json_obj, layout_file, device_info.id)
@@ -871,22 +880,11 @@ class Loader(QMainWindow):
                 self.abort_update(target_device)
                 return
 
-            layout_json_obj = None
-            rf_json_obj = None
-            with open(layout_file) as file_obj:
-                try:
-                    layout_json_obj = yaml.safe_load(file_obj.read())
-                except Exception as err:
-                    error_msg_box("Syntax error in yaml file: " + str(err))
-                    self.abort_update(target_device)
-                    return
-            with open(rf_file) as file_obj:
-                try:
-                    rf_json_obj = yaml.safe_load(file_obj.read())
-                except Exception as err:
-                    error_msg_box("Syntax error in yaml file: " + str(err))
-                    self.abort_update(target_device)
-                    return
+            layout_json_obj = load_yaml_file(layout_file)
+            rf_json_obj = load_yaml_file(rf_file)
+
+            if layout_json_obj == None or rf_json_obj == None:
+                return
 
             try:
                 settings_gen = layout.parser.SettingsGenerator(layout_json_obj, rf_json_obj)
