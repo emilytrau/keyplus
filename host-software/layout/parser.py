@@ -62,8 +62,8 @@ class Layout:
             device_count_i = len(self.layers[layer_i])
             if device_count_i != self.keyboard_count:
                 raise ParseError("Unbalanced layer structure in layout '{}'. "
-                    " The first layer has '{}' devices, but the {} layer has '{}' devices."
-                    .format(layout_name, self.layer_count,
+                    " The first layer has '{}' device(s), but the {} layer has '{}' device(s)."
+                    .format(layout_name, self.keyboard_count,
                             num_to_ordinal_str(layer_i+1), device_count_i)
                 )
             for device_i in range(self.keyboard_count):
@@ -71,8 +71,8 @@ class Layout:
                 actual_size = len(self.layers[layer_i][device_i])
                 if actual_size != expected_size:
                     raise ParseError("Mismatching devices in layout '{}'. "
-                        "The {} device has '{}' keycodes in the first layer, but "
-                        "in the {} layer the same device has '{}' keycodes."
+                        "The {} device has '{}' keycode(s) in the first layer, but "
+                        "in the {} layer, the same device has '{}' keycode(s)."
                         .format(
                             layout_name,
                             num_to_ordinal_str(device_i+1), expected_size,
@@ -88,7 +88,7 @@ class Layout:
             self.matrix_maps = try_get(layout, "matrix_maps", layout_name, val_type=list)
             if len(self.matrix_maps) != self.keyboard_count:
                 raise ParseError("In layout '{}', found '{}' maps in 'matrix_maps', "
-                        "but found {} devices in its 'layers' list".found(
+                        "but found {} device(s) in its 'layers' list".found(
                         self.name, len(self.matrix_maps), self.keyboard_count))
         else:
             self.matrix_maps = None
