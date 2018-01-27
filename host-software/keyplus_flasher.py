@@ -913,7 +913,28 @@ class Loader(QMainWindow):
 
                 if is_xusb_bootloader_device(target_device):
                     self.program_xusb_boot_firmware_hex(target_device, fw_file)
+                # elif is_keyplus_device(target_device):
+                #     try:
+                #         serial_num = target_device.serial_number
+                #         boot_vid, boot_pid = protocol.enter_bootloader(target_device)
+
+                #         self.bootloaderProgramTimer = QTimer()
+                #         self.bootloaderProgramTimer.setInterval(3000)
+                #         self.bootloaderProgramTimer.setSingleShot(True)
+                #         self.bootloaderProgramTimer.timeout.connect( lambda:
+                #             self.programFirmwareHex(boot_vid, boot_pid, serial_num, fw_file)
+                #         )
+                #         self.bootloaderProgramTimer.start()
+                #     except (easyhid.HIDException, protocol.KBProtocolException):
+                #         error_msg_box("Programming hex file failed: '{}'".format(fw_file))
                 elif is_keyplus_device(target_device):
+                    firmwareInfo = protocol.get_firmware_info(target_device)
+
+                    if (firmwareInfo.bootloader_vid, firmwareInfo.bootloader_pid) != (xusb_boot.DEFAULT_VID, xusb_boot.DEFAULT_PID):
+                        error_msg_box("Currently only flashing XMEGA devices is supported. Other devices will be added later")
+                        target_device.close()
+                        return
+
                     try:
                         serial_num = target_device.serial_number
                         boot_vid, boot_pid = protocol.enter_bootloader(target_device)
@@ -969,6 +990,8 @@ class Loader(QMainWindow):
             xusb_boot.write_hexfile(device, file_name)
         except xusb_boot.BootloaderException as err:
             error_msg_box("Error programming the bootloader to hex file: " + str(err))
+        except IOError as err:
+            error_msg_box("Couldn't open firmware hex file: " + str(err))
         finally:
             device.close()
 
