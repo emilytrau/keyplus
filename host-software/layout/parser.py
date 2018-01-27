@@ -124,7 +124,7 @@ class SettingsGenerator:
 
     def gen_single_layout(self, layout):
         result = bytearray(0)
-        for layer in layout.layers:
+        for (layer_i, layer) in enumerate(layout.layers):
             for (kb_i, kb) in enumerate(layer):
                 kc_map = None
                 size = 0
@@ -163,7 +163,13 @@ class SettingsGenerator:
                 keycodes = [0] * size
 
                 for (kc_i, kc_str) in enumerate(kb):
-                    kc = mapped_keycodes.interpret_keycode(kc_str)
+                    try:
+                        kc = mapped_keycodes.interpret_keycode(kc_str)
+                    except ParseKeycodeError as err:
+                        raise ParseError(
+                            "Invalid keycode '{}' used in layout '{}' on layer {}."
+                            .format(kc_str, layout.name, layer_i)
+                        )
                     keycodes[kc_i] = kc
 
                 # pack all the keycodes as uint16_t
