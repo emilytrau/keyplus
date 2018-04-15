@@ -5,16 +5,38 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from PySide.QtGui import (
-    QMainWindow, QTextEdit, QAction, QApplication, QPushButton, QProgressBar,
-    QWidget, QVBoxLayout, QLabel, QHBoxLayout, QLineEdit, QGroupBox,
-    QFormLayout, QScrollArea, QSizePolicy, QGridLayout, QComboBox,
-    QStackedLayout, QMessageBox, QFileDialog, QErrorMessage, QTableView,
-    QFont, QDialog, QTabWidget
-)
-from PySide.QtGui import QIcon, QIntValidator
-from PySide.QtCore import Qt, QBasicTimer, QSize , QFileInfo, QTimer
-from PySide.QtCore import Slot, Signal, QAbstractTableModel
+
+if 1:
+    # PyQt <-> PySide signal compatability
+    from PyQt5.QtCore import pyqtSlot, pyqtSignal
+    Signal = pyqtSignal
+    Slot = pyqtSlot
+    # from PyQt5.QtWidgets import (
+    #     QMainWindow, QTextEdit, QAction, QApplication, QPushButton, QProgressBar,
+    #     QWidget, QVBoxLayout, QLabel, QHBoxLayout, QLineEdit, QGroupBox,
+    #     QFormLayout, QScrollArea, QSizePolicy, QGridLayout, QComboBox,
+    #     QStackedLayout, QMessageBox, QFileDialog, QErrorMessage, QTableView,
+    #     QFont, QDialog, QTabWidget
+    # )
+    # from PyQt5.QtGui import QIcon, QIntValidator
+    # from PyQt5.QtCore import Qt, QBasicTimer, QSize , QFileInfo, QTimer
+    # from PyQt5.QtCore import Slot, Signal, QAbstractTableModel
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtGui import *
+    from PyQt5.QtCore import *
+    from PyQt5.QtCore import *
+
+if 0:
+    from PySide.QtGui import (
+        QMainWindow, QTextEdit, QAction, QApplication, QPushButton, QProgressBar,
+        QWidget, QVBoxLayout, QLabel, QHBoxLayout, QLineEdit, QGroupBox,
+        QFormLayout, QScrollArea, QSizePolicy, QGridLayout, QComboBox,
+        QStackedLayout, QMessageBox, QFileDialog, QErrorMessage, QTableView,
+        QFont, QDialog, QTabWidget
+    )
+    from PySide.QtGui import QIcon, QIntValidator
+    from PySide.QtCore import Qt, QBasicTimer, QSize , QFileInfo, QTimer
+    from PySide.QtCore import Slot, Signal, QAbstractTableModel
 
 from keyplus.layout import KeyplusLayout
 from keyplus.device_info import KeyboardDeviceTarget, KeyboardFirmwareInfo
