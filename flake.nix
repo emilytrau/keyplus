@@ -14,22 +14,10 @@
     inputs.python-cstruct.url = "github:andreax79/python-cstruct/v3.3";
     inputs.python-cstruct.flake = false;
 
-    inputs.python-easyhid.url = "github:ahtn/python-easyhid";
-    inputs.python-easyhid.flake = false;
-
-    inputs.xusb-boot.url = "github:ahtn/xusb-boot";
-    inputs.xusb-boot.flake = false;
-
-    inputs.python-efm8boot.url = "github:ahtn/python-efm8boot";
-    inputs.python-efm8boot.flake = false;
-
-    inputs.kp_boot_32u4.url = "github:ahtn/kp_boot_32u4";
-    inputs.kp_boot_32u4.flake = false;
-
     inputs.nrf5-sdk.url = "https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK153059ac345.zip";
     inputs.nrf5-sdk.flake = false;
 
-    outputs = inputs@{ self, nixpkgs, flake-utils, python-cstruct, python-easyhid, xusb-boot, python-efm8boot, kp_boot_32u4, nrf5-sdk, ... }:
+    outputs = inputs@{ self, nixpkgs, flake-utils, python-cstruct, nrf5-sdk, ... }:
         flake-utils.lib.eachDefaultSystem
             (system:
                 let
@@ -60,7 +48,7 @@
                         pname = "easyhid";
                         version = "0.0.10";
 
-                        src = python-easyhid;
+                        src = "${self}/vendor/python-easyhid";
 
                         postPatch = ''
                             substituteInPlace easyhid/easyhid.py \
@@ -87,7 +75,7 @@
                         pname = "xusbboot";
                         version = "0.0.2";
 
-                        src = xusb-boot;
+                        src = "${self}/vendor/xusb-boot";
 
                         preConfigure = ''
                             cd scripts
@@ -111,7 +99,7 @@
                         pname = "efm8boot";
                         version = "0.0.8";
 
-                        src = python-efm8boot;
+                        src = "${self}/vendor/python-efm8boot";
 
                         propagatedBuildInputs = with pkgs.python3Packages; [ packages.python-easyhid crcmod intelhex ];
 
@@ -131,7 +119,7 @@
                         pname = "kp_boot_32u4";
                         version = "0.0.3";
 
-                        src = kp_boot_32u4;
+                        src = "${self}/vendor/kp_boot_32u4";
 
                         propagatedBuildInputs = with pkgs.python3Packages; [ packages.python-easyhid hexdump intelhex ];
 

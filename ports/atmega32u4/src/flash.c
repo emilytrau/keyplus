@@ -75,7 +75,7 @@ static inline void sp_write_page(uint16_t address) {
  *              kp_boot_32u4 bootloader flash interface              *
  *********************************************************************/
 
-#include "bootloaders/kp_boot_32u4/interface/kp_boot_32u4.h"
+#include "kp_boot_32u4/interface/kp_boot_32u4.h"
 
 void flash_erase_page(flash_addr_t page_num) {
     spm_erase_page(page_num * PAGE_SIZE);

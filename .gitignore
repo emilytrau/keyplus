@@ -4,6 +4,7 @@
 *.fuse
 *.spec
 *.egg-info
+.vscode/*
 build$
 !build.sh
 build/

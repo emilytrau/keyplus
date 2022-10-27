@@ -3,7 +3,7 @@
 # Licensed under the MIT license (http://opensource.org/licenses/MIT)
 
 keyplus_cmd=../host-software/keyplus-cli
-xusb_cmd=./xusb-boot/scripts/bin/xusbboot-cli
+xusb_cmd=../vendor/xusb-boot/scripts/bin/xusbboot-cli
 
 if [[ $# -ne 2 ]]; then
     echo "Usage: $0 hex_file"

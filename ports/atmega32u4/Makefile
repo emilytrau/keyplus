@@ -17,7 +17,8 @@ USB_DESCRIPTOR_ARRANGEMENT = normal
 
 KEYPLUS_PATH      = ../../src
 ATMEGA32U4_PATH   = ./src
-AVR_MKFILE_PATH   = $(KEYPLUS_PATH)/arch/avr/avr-makefile
+AVR_MKFILE_PATH   = ../../vendor/avr-makefile
+XUSB_BOOT_PATH    = ../../vendor/xusb-boot
 
 VPATH += $(KEYPLUS_PATH)
 VPATH += $(ATMEGA32U4_PATH)
@@ -109,7 +110,8 @@ ATMEL_VID=0x03EB
 FLIP_USB_DFU_32u4=0x02FF
 
 BOOTLOADER_PATH = bootloaders
-CFLAGS += -I$(BOOTLOADER_PATH)
+KP_BOOT_32U4_PATH = ../../vendor/kp_boot_32u4
+CFLAGS += -I$(BOOTLOADER_PATH) -I$(KP_BOOT_32U4_PATH)/interface
 
 # see avr-gcc for information on avrxmega2, avrxmega4, etc
 # NOTE: haven't tested on all these chips
@@ -133,7 +135,7 @@ else ifeq ($(BOOTLOADER), kp_boot_32u4)
   CFLAGS += -DBOOTLOADER_VID=0x1209
   CFLAGS += -DBOOTLOADER_PID=0xBB05
   CFLAGS += -DBOOTLOADER_KP_BOOT_32U4
-  C_SRC += $(BOOTLOADER_PATH)/kp_boot_32u4/interface/kp_boot_32u4.c
+  C_SRC += $(KP_BOOT_32U4_PATH)/interface/kp_boot_32u4.c
 else
   $(error Unsupported bootloader BOOTLOADER='$(BOOTLOADER)')
 endif
@@ -177,7 +179,7 @@ program-boot: $(TARGET).hex
 
 # program a board that is already in in bootloader mode
 program-boot-2: $(TARGET).hex
-	./xusb-boot/scripts/flash.py -f $<
+	$(XUSB_BOOT_PATH)/scripts/flash.py -f $<
 
 
 # program a board using an external programmer
@@ -207,7 +209,7 @@ program-dfu: $(MERGED_HEX)
 	dfu-programmer $(MCU) start
 
 program-kp-boot: $(MERGED_HEX)
-	$(BOOTLOADER_PATH)/kp_boot_32u4/kp_boot_32u4_cli.py -f $(MERGED_HEX)
+	$(KP_BOOT_32U4_PATH)/kp_boot_32u4_cli.py -f $(MERGED_HEX)
 
 # lock options, see fuses.c (lock bit values written to $(TARGET).lock)
 #

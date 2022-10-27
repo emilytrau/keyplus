@@ -44,7 +44,7 @@ void reset_mcu(void) {
 
 #elif defined(BOOTLOADER_KP_BOOT_32U4)
 
-#include "bootloaders/kp_boot_32u4/interface/kp_boot_32u4.h"
+#include "kp_boot_32u4/interface/kp_boot_32u4.h"
 
 void reset_mcu(void) {
     kp_boot_reset();

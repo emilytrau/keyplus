@@ -20,13 +20,15 @@ USB_DESCRIPTOR_ARRANGEMENT = normal
 CLOCK_SPEED_SLOW = 12000000
 
 KEYPLUS_PATH      = ../../src
-AVR_MKFILE_PATH   = $(KEYPLUS_PATH)/arch/avr/avr-makefile
+AVR_MKFILE_PATH   = ../../vendor/avr-makefile
 XMEGA_PATH        = ./src
+
+XUSB_BOOT_PATH    = ../../vendor/xusb-boot
 
 VPATH += $(KEYPLUS_PATH)
 VPATH += $(XMEGA_PATH)
 
-BOOTLOADER_PATH := ./xusb-boot/
+BOOTLOADER_PATH := $(XUSB_BOOT_PATH)
 BOOTLOADER_HEX := $(BOOTLOADER_PATH)/build/$(BOARD)-$(MCU)/xusb-boot-$(BOARD)-$(MCU).hex
 MERGED_HEX_WITH_BOOT := $(basename $(MERGED_HEX))_with_bootloader.hex
 
@@ -61,7 +63,7 @@ include $(KEYPLUS_PATH)/arch/avr/avr.mk
 # AVRDUDE_CMD=avrdude-pdi -C ~/local/etc/avrdude-pdi.conf -c usbasp -p $(AVRDUDE_PART)
 AVRDUDE_CMD=avrdude -p $(AVRDUDE_PART) -c avrispmkII
 
-XUSBBOOT_CLI = python3 ./xusb-boot/scripts/bin/xusbboot-cli
+XUSBBOOT_CLI = python3 $(XUSB_BOOT_PATH)/scripts/bin/xusbboot-cli
 
 #######################################################################
 #                             c settings                              #

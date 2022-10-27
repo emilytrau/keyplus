@@ -26,6 +26,7 @@ USE_SCANNER = 0
 KEYPLUS_PATH  = ../../src
 NRF24LU1_PATH = ./src
 UNIFLASH_CLI = ../../host-software/uniflash/uniflash.py
+NRF24_BOOTLOADER_PATH = ../../vendor/nrf24lu1p-512-bootloader
 
 VPATH += $(KEYPLUS_PATH)
 VPATH += $(NRF24LU1_PATH)
@@ -233,7 +234,7 @@ clean:
 
 program-boot: $(MERGED_HEX) size
 	$(KEYPLUS_CLI) bootloader -p $(MCU_STRING) | sleep 1.0
-	./nrf24lu1p-512-bootloader/scripts/flash.py write_hex $<
+	$(NRF24_BOOTLOADER_PATH)/scripts/flash.py write_hex $<
 
 program-unirecv: $(MERGED_HEX)
 	$(KEYPLUS_CLI) bootloader -p $(MCU_STRING) | sleep 1.0

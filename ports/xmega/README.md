@@ -65,7 +65,7 @@ If you have a board that you made yourself, then you will need to flash the
 bootloader before you can use the `program-boot` command. To do this, you will
 first need to build and flash the bootloader.
 
-To build the bootloader, first enter the `xmega/xusb-boot/` directory, and
+To build the bootloader, first enter the `vendor/xusb-boot/` directory, and
 run:
 
 ```bash

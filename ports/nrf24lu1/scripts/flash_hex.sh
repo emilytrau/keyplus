@@ -8,4 +8,4 @@ fi
 
 ../host-software/keyplus_cli.py bootloader -d 6666:3333
 sleep 1.0
-./nrf24lu1p-512-bootloader/scripts/flash.py write_hex $1
+../vendor/nrf24lu1p-512-bootloader/scripts/flash.py write_hex $1

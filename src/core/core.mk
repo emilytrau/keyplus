@@ -83,6 +83,7 @@ C_SRC += \
 	$(CORE_PATH)/util.c \
 
 INC_PATHS += -I$(KEYPLUS_PATH)
+INC_PATHS += -I../../vendor
 
 USE_VIRTUAL_MODE ?= 0
 

@@ -25,7 +25,7 @@
 #include "key_handlers/key_hold.h"
 #include "key_handlers/key_mouse.h"
 
-#include "bootloaders/kp_boot_32u4/interface/kp_boot_32u4.h"
+#include "kp_boot_32u4/interface/kp_boot_32u4.h"
 
 #include "io_map/avr_port_util.h"
 
