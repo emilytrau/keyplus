@@ -17,28 +17,18 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1666782722,
-        "narHash": "sha256-q9/tGoFiFPemXO1++Oodp7dHIjm1OsjnqSlaCJeU8hY=",
+        "lastModified": 1666837999,
+        "narHash": "sha256-hI7+s1UVDsJNqNn9UGV6xTBGqMC4dqOyVpeDf+su7JU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6fc17eb2ba5cc4a7be2330f3052cb331ee1f4dd8",
+        "rev": "1c6eb4876f71e8903ae9f73e6adf45fdbebc0292",
         "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
-      }
-    },
-    "nrf5-sdk": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-pfmhbpgVv5x2ju489XcivguwpnofHbgVA7bFUJRTj08=",
-        "type": "tarball",
-        "url": "https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK153059ac345.zip"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK153059ac345.zip"
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "python-cstruct": {
@@ -62,7 +52,6 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
-        "nrf5-sdk": "nrf5-sdk",
         "python-cstruct": "python-cstruct"
       }
     }

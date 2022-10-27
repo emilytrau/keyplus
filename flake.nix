@@ -9,20 +9,24 @@
         ];
     };
 
+    inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
     inputs.flake-utils.url = "github:numtide/flake-utils";
 
     inputs.python-cstruct.url = "github:andreax79/python-cstruct/v3.3";
     inputs.python-cstruct.flake = false;
 
-    inputs.nrf5-sdk.url = "https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK153059ac345.zip";
-    inputs.nrf5-sdk.flake = false;
-
-    outputs = inputs@{ self, nixpkgs, flake-utils, python-cstruct, nrf5-sdk, ... }:
+    outputs = inputs@{ self, nixpkgs, flake-utils, python-cstruct, ... }:
         flake-utils.lib.eachDefaultSystem
             (system:
                 let
                     pkgs = nixpkgs.legacyPackages.${system};
                     inherit (pkgs) lib;
+
+                    nrf5-sdk = pkgs.fetchzip {
+                        url = "https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK153059ac345.zip";
+                        hash = "sha256-pfmhbpgVv5x2ju489XcivguwpnofHbgVA7bFUJRTj08=";
+                    };
                 in
                 rec {
                     devShells.default = import ./shell.nix { inherit pkgs; };
