@@ -1,0 +1,161 @@
+{
+    description = "An easy to use, wired and wireless modular keyboard firmware";
+
+    inputs.flake-utils.url = "github:numtide/flake-utils";
+
+    inputs.python-cstruct.url = "github:andreax79/python-cstruct/v3.3";
+    inputs.python-cstruct.flake = false;
+
+    inputs.python-easyhid.url = "github:ahtn/python-easyhid";
+    inputs.python-easyhid.flake = false;
+
+    inputs.xusb-boot.url = "github:ahtn/xusb-boot";
+    inputs.xusb-boot.flake = false;
+
+    inputs.python-efm8boot.url = "github:ahtn/python-efm8boot";
+    inputs.python-efm8boot.flake = false;
+
+    inputs.kp_boot_32u4.url = "github:ahtn/kp_boot_32u4";
+    inputs.kp_boot_32u4.flake = false;
+
+    outputs = { self, nixpkgs, flake-utils, python-cstruct, python-easyhid, xusb-boot, python-efm8boot, kp_boot_32u4 }:
+        flake-utils.lib.eachDefaultSystem
+            (system:
+                let
+                    pkgs = nixpkgs.legacyPackages.${system};
+                    inherit (pkgs) lib;
+                in
+                rec {
+                    devShells.default = import ./shell.nix { inherit pkgs; };
+
+                    packages.python-cstruct = pkgs.python3Packages.buildPythonPackage rec {
+                        pname = "cstruct";
+                        version = "3.3";
+
+                        src = python-cstruct;
+
+                        checkInputs = with pkgs.python3Packages; [ pytestCheckHook ];
+                        pythonImportsCheck = [ "cstruct" ];
+
+                        meta = with lib; {
+                            description = "Convert C struct definitions into Python classes with methods for serializing/deserializing";
+                            homepage = "http://github.com/andreax79/python-cstruct";
+                            license = licenses.mit;
+                            maintainers = with maintainers; [ emilytrau ];
+                        };
+                    };
+
+                    packages.python-easyhid = pkgs.python3Packages.buildPythonPackage rec {
+                        pname = "easyhid";
+                        version = "0.0.10";
+
+                        src = python-easyhid;
+
+                        propagatedBuildInputs = with pkgs.python3Packages; [ cffi ];
+                        propagatedNativeBuildInputs = with pkgs; [ hidapi ];
+
+                        # No tests are available
+                        doCheck = false;
+                        pythonImportsCheck = [ "easyhid" ];
+
+                        meta = with lib; {
+                            description = "A simple interface to the HIDAPI library";
+                            homepage = "http://github.com/ahtn/python-easyhid";
+                            license = licenses.mit;
+                            maintainers = with maintainers; [ emilytrau ];
+                            platforms = platforms.unix;
+                        };
+                    };
+
+                    packages.python-xusbboot = pkgs.python3Packages.buildPythonPackage rec {
+                        pname = "xusbboot";
+                        version = "0.0.2";
+
+                        src = xusb-boot;
+
+                        preConfigure = ''
+                            cd scripts
+                        '';
+
+                        propagatedBuildInputs = with pkgs.python3Packages; [ packages.python-easyhid hexdump intelhex ];
+
+                        # No tests are available
+                        doCheck = false;
+                        pythonImportsCheck = [ "xusbboot" ];
+
+                        meta = with lib; {
+                            description = "Python library for xmega xusb bootloader";
+                            homepage = "http://github.com/ahtn/xusb-boot";
+                            license = licenses.mit;
+                            maintainers = with maintainers; [ emilytrau ];
+                        };
+                    };
+
+                    packages.python-efm8boot = pkgs.python3Packages.buildPythonPackage rec {
+                        pname = "efm8boot";
+                        version = "0.0.8";
+
+                        src = python-efm8boot;
+
+                        propagatedBuildInputs = with pkgs.python3Packages; [ packages.python-easyhid crcmod intelhex ];
+
+                        # No tests are available
+                        doCheck = false;
+                        pythonImportsCheck = [ "efm8boot" ];
+
+                        meta = with lib; {
+                            description = "A python package for working with efm8 bootloaders";
+                            homepage = "https://github.com/ahtn/python-efm8boot";
+                            license = licenses.mit;
+                            maintainers = with maintainers; [ emilytrau ];
+                        };
+                    };
+
+                    packages.python-kp_boot_32u4 = pkgs.python3Packages.buildPythonPackage rec {
+                        pname = "kp_boot_32u4";
+                        version = "0.0.3";
+
+                        src = kp_boot_32u4;
+
+                        propagatedBuildInputs = with pkgs.python3Packages; [ packages.python-easyhid hexdump intelhex ];
+
+                        # No tests are available
+                        doCheck = false;
+                        pythonImportsCheck = [ "kp_boot_32u4" ];
+
+                        meta = with lib; {
+                            description = "driverless, 1kb bootloader for atmega32u4, with support for writing flash and eeprom";
+                            homepage = "https://github.com/ahtn/kp_boot_32u4";
+                            license = licenses.mit;
+                            maintainers = with maintainers; [ emilytrau ];
+                        };
+                    };
+
+                    packages.keyplus = pkgs.python3Packages.callPackage ./host-software {
+                        inherit (packages) python-cstruct python-easyhid python-xusbboot python-efm8boot python-kp_boot_32u4;
+                    };
+
+                    packages.xmega = pkgs.stdenv.mkDerivation rec {
+                        name = "keyplus-xmega";
+                        src = self;
+                        preConfigure = ''
+                            cd ports/xmega
+                        '';
+                        nativeBuildInputs = with pkgs; [
+                            pkgsCross.avr.pkgsBuildTarget.gcc6
+                        ];
+                        makeFlags = [
+                            "BOARD=keyplus_mini"
+                            "LAYOUT_FILE=${./layouts}/small_split_test.yaml"
+                            "ID=12"
+                            "BUILD_TARGET_DIR=${placeholder "out"}"
+                            "GIT_HASH_FULL=${if (self ? rev) then self.rev else "0000000000000000000000000000000000000000"}"
+                            "PYTHON_CMD=${pkgs.python3.interpreter}"
+                            "KEYPLUS_CLI=${packages.keyplus}/bin/keyplus-cli"
+                        ];
+                        # Outputs are copied in build phase
+                        dontInstall = true;
+                    };
+                }
+            );
+}

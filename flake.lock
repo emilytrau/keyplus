@@ -1,0 +1,127 @@
+{
+  "nodes": {
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "kp_boot_32u4": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1559970181,
+        "narHash": "sha256-wSqaTAgaW+6cu9F8F4Vvq/8ga7ADlTEz2Api/g7UXWk=",
+        "owner": "ahtn",
+        "repo": "kp_boot_32u4",
+        "rev": "54e899e9b1a06bb310a2d72bf9cc3017a8513ea2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ahtn",
+        "repo": "kp_boot_32u4",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1666782722,
+        "narHash": "sha256-q9/tGoFiFPemXO1++Oodp7dHIjm1OsjnqSlaCJeU8hY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "6fc17eb2ba5cc4a7be2330f3052cb331ee1f4dd8",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "python-cstruct": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1666599602,
+        "narHash": "sha256-5HO5P7Y7NAFTYxu1QOwZj5oaHMDGnF2Y/YzeZLFSw14=",
+        "owner": "andreax79",
+        "repo": "python-cstruct",
+        "rev": "ecc321bf06fb47d967142c2bc2bb18496e53c0a3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "andreax79",
+        "ref": "v3.3",
+        "repo": "python-cstruct",
+        "type": "github"
+      }
+    },
+    "python-easyhid": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1559962713,
+        "narHash": "sha256-lEv6OEg7e+03MEs2HSLUzl4OCdC0BzUJOOoDb9h6nY4=",
+        "owner": "ahtn",
+        "repo": "python-easyhid",
+        "rev": "be85e744c3b48f0ce5d6052fc463178778a939e6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ahtn",
+        "repo": "python-easyhid",
+        "type": "github"
+      }
+    },
+    "python-efm8boot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1559968865,
+        "narHash": "sha256-SqH2joZHZNL03tZzh/5yvlHebSHAZ2EbpG56rFp0heY=",
+        "owner": "ahtn",
+        "repo": "python-efm8boot",
+        "rev": "1f37c1289aad52b9d710c14a0a8b8381938aa0c2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ahtn",
+        "repo": "python-efm8boot",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "kp_boot_32u4": "kp_boot_32u4",
+        "nixpkgs": "nixpkgs",
+        "python-cstruct": "python-cstruct",
+        "python-easyhid": "python-easyhid",
+        "python-efm8boot": "python-efm8boot",
+        "xusb-boot": "xusb-boot"
+      }
+    },
+    "xusb-boot": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1525761717,
+        "narHash": "sha256-rY1sfdZP16y7URDySMGzMocPy8vWmMJk2Ttpu9zQ3vk=",
+        "owner": "ahtn",
+        "repo": "xusb-boot",
+        "rev": "4c694463eb2bedd5c2e962e508793eb95e194595",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ahtn",
+        "repo": "xusb-boot",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

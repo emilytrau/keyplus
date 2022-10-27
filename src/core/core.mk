@@ -19,7 +19,9 @@ res = ','.join(['0x{:x}'.format((a >> (i*8))&0xff) for i in range(8)]); \
 print(res); \
 ")
 
-GIT_HASH_FULL := $(shell git rev-parse HEAD)
+ifndef GIT_HASH_FULL
+    GIT_HASH_FULL := $(shell git rev-parse HEAD)
+endif
 
 # Convert the git hash into a c byte array
 GIT_HASH := $(shell $(PYTHON_CMD) -c "import datetime;\
