@@ -157,7 +157,7 @@
                         src = self;
 
                         nativeBuildInputs = with pkgs; [
-                            pkgsCross.avr.buildPackages.gcc6
+                            pkgsCross.avr.buildPackages.gcc8
                         ];
 
                         makeFlags = [
@@ -180,6 +180,35 @@
                         '';
                     };
 
+                    packages.atmega32u4 = pkgs.stdenv.mkDerivation rec {
+                        name = "keyplus-atmega32u4";
+
+                        src = self;
+
+                        nativeBuildInputs = with pkgs; [
+                            pkgsCross.avr.buildPackages.gcc8
+                        ];
+
+                        makeFlags = [
+                            "--directory=ports/atmega32u4"
+                            "MCU=atmega32u4"
+                            "BOARD=default"
+                            "LAYOUT_FILE=${./layouts}/1key.yaml"
+                            "GIT_HASH_FULL=${if (self ? rev) then self.rev else "0000000000000000000000000000000000000000"}"
+                            "PYTHON_CMD=${pkgs.python3.interpreter}"
+                            "KEYPLUS_CLI=${packages.keyplus}/bin/keyplus-cli"
+                        ];
+
+                        installPhase = ''
+                          runHook preInstall
+
+                          mkdir $out
+                          find ports/atmega32u4 -name "*.hex" -exec install {} $out \;
+
+                          runHook postInstall
+                        '';
+                    };
+
                     packages.nrf52 = pkgs.stdenv.mkDerivation rec {
                         name = "keyplus-nrf52840";
 
@@ -191,7 +220,7 @@
                             "LAYOUT_FILE=${./layouts}/nrf52_4key.yaml"
                             "ID=0"
                             "GIT_HASH_FULL=${if (self ? rev) then self.rev else "0000000000000000000000000000000000000000"}"
-                            "GNU_INSTALL_ROOT=${pkgs.gcc-arm-embedded-6}/bin/"
+                            "GNU_INSTALL_ROOT=${pkgs.gcc-arm-embedded-8}/bin/"
                             "NRF52_SDK_ROOT=${nrf5-sdk}"
                             "PYTHON_CMD=${pkgs.python3.interpreter}"
                             "KEYPLUS_CLI=${packages.keyplus}/bin/keyplus-cli"
