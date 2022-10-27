@@ -1,6 +1,14 @@
 {
     description = "An easy to use, wired and wireless modular keyboard firmware";
 
+    nixConfig = {
+        bash-prompt-prefix = "(keyplus) ";
+        extra-trusted-substituters = [ "https://keyplus.cachix.org" ];
+        extra-trusted-public-keys = [
+            "keyplus.cachix.org-1:qb7JdXS2YJEClsL+qOfNW9HuBHIaws+CTd8onsVt+e4="
+        ];
+    };
+
     inputs.flake-utils.url = "github:numtide/flake-utils";
 
     inputs.python-cstruct.url = "github:andreax79/python-cstruct/v3.3";
@@ -148,13 +156,19 @@
                             "BOARD=keyplus_mini"
                             "LAYOUT_FILE=${./layouts}/small_split_test.yaml"
                             "ID=12"
-                            "BUILD_TARGET_DIR=${placeholder "out"}"
                             "GIT_HASH_FULL=${if (self ? rev) then self.rev else "0000000000000000000000000000000000000000"}"
                             "PYTHON_CMD=${pkgs.python3.interpreter}"
                             "KEYPLUS_CLI=${packages.keyplus}/bin/keyplus-cli"
                         ];
-                        # Outputs are copied in build phase
-                        dontInstall = true;
+
+                        installPhase = ''
+                          runHook preInstall
+
+                          mkdir $out
+                          find . -name "*.hex" -exec install {} $out \;
+
+                          runHook postInstall
+                        '';
                     };
                 }
             );
