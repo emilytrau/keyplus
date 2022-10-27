@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Test building the documentation
 doxygen doc/doxygen/doxygen_config

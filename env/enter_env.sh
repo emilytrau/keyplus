@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # To enter the environment run this command in your shell:
 # source ./env/enter_env.sh
 

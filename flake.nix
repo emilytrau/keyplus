@@ -27,6 +27,20 @@
                 rec {
                     devShells.default = import ./shell.nix { inherit pkgs; };
 
+                    # SDCC can be pretty buggy from release to release,
+                    # so often need to compile from source to get things to
+                    # work well.
+                    packages.sdcc = (pkgs.sdcc.override {
+                            excludePorts = ["z80" "z180" "r2k" "r3ka" "gbz80" "tlcs90" "ds390" "ds400" "pic14" "pic16" "hc08" "s08" "stm8"];
+                        }).overrideAttrs (old: rec {
+                            version = "r9948";
+                            src = pkgs.fetchsvn {
+                                url = "https://svn.code.sf.net/p/sdcc/code/trunk/sdcc";
+                                rev = version;
+                                sha256 = "1vgsbibfdp4py2ldl3gpmgrjk6hladwmpdnnlrrlk2v8w1nshx9x";
+                            };
+                        });
+
                     packages.python-cstruct = pkgs.python3Packages.buildPythonPackage rec {
                         pname = "cstruct";
                         version = "3.3";
@@ -48,7 +62,7 @@
                         pname = "easyhid";
                         version = "0.0.10";
 
-                        src = "${self}/vendor/python-easyhid";
+                        src = "${./vendor/python-easyhid}";
 
                         postPatch = ''
                             substituteInPlace easyhid/easyhid.py \
@@ -75,7 +89,7 @@
                         pname = "xusbboot";
                         version = "0.0.2";
 
-                        src = "${self}/vendor/xusb-boot";
+                        src = "${./vendor}/xusb-boot";
 
                         preConfigure = ''
                             cd scripts
@@ -99,7 +113,7 @@
                         pname = "efm8boot";
                         version = "0.0.8";
 
-                        src = "${self}/vendor/python-efm8boot";
+                        src = "${./vendor/python-efm8boot}";
 
                         propagatedBuildInputs = with pkgs.python3Packages; [ packages.python-easyhid crcmod intelhex ];
 
@@ -119,7 +133,7 @@
                         pname = "kp_boot_32u4";
                         version = "0.0.3";
 
-                        src = "${self}/vendor/kp_boot_32u4";
+                        src = "${./vendor}/kp_boot_32u4";
 
                         propagatedBuildInputs = with pkgs.python3Packages; [ packages.python-easyhid hexdump intelhex ];
 
@@ -192,6 +206,37 @@
 
                           mkdir $out
                           find ports/atmega32u4 -name "*.hex" -exec install {} $out \;
+
+                          runHook postInstall
+                        '';
+                    };
+
+                    packages.unirecv = pkgs.stdenv.mkDerivation rec {
+                        name = "keyplus-unirecv";
+
+                        src = self;
+
+                        postPatch = ''
+                            patchShebangs .
+                        '';
+
+                        makeFlags = [
+                            "--directory=ports/nrf24lu1"
+                            "BOARD=unirecv"
+                            "LAYOUT_FILE=${./layouts}/basic_split_test.yaml"
+                            "ID=48"
+                            "GIT_HASH_FULL=${if (self ? rev) then self.rev else "0000000000000000000000000000000000000000"}"
+                            "SDCC_PATH=${packages.sdcc}"
+                            "SDCC_BIN_PATH=${packages.sdcc}/bin"
+                            "PYTHON_CMD=${pkgs.python3.interpreter}"
+                            "KEYPLUS_CLI=${packages.keyplus}/bin/keyplus-cli"
+                        ];
+
+                        installPhase = ''
+                          runHook preInstall
+
+                          mkdir $out
+                          find ports/nrf24lu1 -name "*.hex" -exec install {} $out \;
 
                           runHook postInstall
                         '';

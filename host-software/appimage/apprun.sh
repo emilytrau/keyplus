@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 export APPDIR="$(dirname "$(readlink -f "$0")")"
 export PATH="$APPDIR/usr/bin/:$PATH"

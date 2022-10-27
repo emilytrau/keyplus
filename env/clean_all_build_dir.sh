@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 TARGETS="atmega32u4 xmega nrf24lu1 efm8 nrf52 linux"
 
