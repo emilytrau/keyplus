@@ -35,6 +35,6 @@ setup(
         'kp_boot_32u4>=0.0.2',
     ],
     keywords = ['keyboard', 'usb', 'hid'],
-    scripts = ['keyplus-cli'],
+    scripts = ['keyplus-cli', 'keyplus_flasher.py'],
     zip_safe = False,
 )

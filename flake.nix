@@ -59,8 +59,13 @@
 
                         src = python-easyhid;
 
+                        postPatch = ''
+                            substituteInPlace easyhid/easyhid.py \
+                                --replace "ffi.dlopen('hidapi')" "ffi.dlopen('${pkgs.hidapi}/lib/libhidapi${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}')" \
+                                --replace "ffi.dlopen('hidapi-hidraw')" "ffi.dlopen('${pkgs.hidapi}/lib/libhidapi-hidraw${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}')"
+                        '';
+
                         propagatedBuildInputs = with pkgs.python3Packages; [ cffi ];
-                        propagatedNativeBuildInputs = with pkgs; [ hidapi ];
 
                         # No tests are available
                         doCheck = false;
