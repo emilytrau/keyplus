@@ -26,7 +26,10 @@
     inputs.kp_boot_32u4.url = "github:ahtn/kp_boot_32u4";
     inputs.kp_boot_32u4.flake = false;
 
-    outputs = { self, nixpkgs, flake-utils, python-cstruct, python-easyhid, xusb-boot, python-efm8boot, kp_boot_32u4 }:
+    inputs.nrf5-sdk.url = "https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK153059ac345.zip";
+    inputs.nrf5-sdk.flake = false;
+
+    outputs = inputs@{ self, nixpkgs, flake-utils, python-cstruct, python-easyhid, xusb-boot, python-efm8boot, kp_boot_32u4, nrf5-sdk, ... }:
         flake-utils.lib.eachDefaultSystem
             (system:
                 let
@@ -154,7 +157,7 @@
                         src = self;
 
                         nativeBuildInputs = with pkgs; [
-                            pkgsCross.avr.pkgsBuildTarget.gcc6
+                            pkgsCross.avr.buildPackages.gcc6
                         ];
 
                         makeFlags = [
@@ -172,6 +175,33 @@
 
                           mkdir $out
                           find ports/xmega -name "*.hex" -exec install {} $out \;
+
+                          runHook postInstall
+                        '';
+                    };
+
+                    packages.nrf52 = pkgs.stdenv.mkDerivation rec {
+                        name = "keyplus-nrf52840";
+
+                        src = self;
+
+                        makeFlags = [
+                            "--directory=ports/nrf52"
+                            "BOARD=nrf52840_dk"
+                            "LAYOUT_FILE=${./layouts}/nrf52_4key.yaml"
+                            "ID=0"
+                            "GIT_HASH_FULL=${if (self ? rev) then self.rev else "0000000000000000000000000000000000000000"}"
+                            "GNU_INSTALL_ROOT=${pkgs.gcc-arm-embedded-6}/bin/"
+                            "NRF52_SDK_ROOT=${nrf5-sdk}"
+                            "PYTHON_CMD=${pkgs.python3.interpreter}"
+                            "KEYPLUS_CLI=${packages.keyplus}/bin/keyplus-cli"
+                        ];
+
+                        installPhase = ''
+                          runHook preInstall
+
+                          mkdir $out
+                          find ports/nrf52 -name "*.hex" -exec install {} $out \;
 
                           runHook postInstall
                         '';

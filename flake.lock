@@ -45,6 +45,18 @@
         "type": "indirect"
       }
     },
+    "nrf5-sdk": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-pfmhbpgVv5x2ju489XcivguwpnofHbgVA7bFUJRTj08=",
+        "type": "tarball",
+        "url": "https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK153059ac345.zip"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK153059ac345.zip"
+      }
+    },
     "python-cstruct": {
       "flake": false,
       "locked": {
@@ -99,6 +111,7 @@
         "flake-utils": "flake-utils",
         "kp_boot_32u4": "kp_boot_32u4",
         "nixpkgs": "nixpkgs",
+        "nrf5-sdk": "nrf5-sdk",
         "python-cstruct": "python-cstruct",
         "python-easyhid": "python-easyhid",
         "python-efm8boot": "python-efm8boot",
