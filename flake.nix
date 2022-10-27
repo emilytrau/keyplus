@@ -150,14 +150,15 @@
 
                     packages.xmega = pkgs.stdenv.mkDerivation rec {
                         name = "keyplus-xmega";
+
                         src = self;
-                        preConfigure = ''
-                            cd ports/xmega
-                        '';
+
                         nativeBuildInputs = with pkgs; [
                             pkgsCross.avr.pkgsBuildTarget.gcc6
                         ];
+
                         makeFlags = [
+                            "--directory=ports/xmega"
                             "BOARD=keyplus_mini"
                             "LAYOUT_FILE=${./layouts}/small_split_test.yaml"
                             "ID=12"
@@ -170,7 +171,7 @@
                           runHook preInstall
 
                           mkdir $out
-                          find . -name "*.hex" -exec install {} $out \;
+                          find ports/xmega -name "*.hex" -exec install {} $out \;
 
                           runHook postInstall
                         '';
